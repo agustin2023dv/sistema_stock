@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Escáner de Códigos de Barras</title>
-  <script src="https://unpkg.com/html5-qrcode@2.3.10/minified/html5-qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <style>
     body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
     #reader { width: 100%; max-width: 400px; margin: auto; }
@@ -18,7 +18,8 @@
 
   <script>
     function startScanner() {
-        console.log("🚀 Scanner iniciado");
+      console.log("🚀 Scanner iniciado");
+
       const html5QrCode = new Html5Qrcode("reader");
 
       const config = {
@@ -32,7 +33,7 @@
         config,
         (decodedText, decodedResult) => {
           document.getElementById('result').innerText = "✅ Código detectado: " + decodedText;
-          html5QrCode.stop(); // detiene escaneo tras primera lectura
+          html5QrCode.stop();
         },
         (errorMessage) => {
           console.warn("Error de escaneo", errorMessage);
