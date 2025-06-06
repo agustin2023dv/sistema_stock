@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Escáner de Códigos de Barras</title>
+  <script src="https://unpkg.com/html5-qrcode@2.3.10/minified/html5-qrcode.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    #reader { width: 100%; max-width: 400px; margin: auto; }
+    #result { margin-top: 20px; font-size: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h1>📦 Escáner de Stock</h1>
+  <div id="reader"></div>
+  <div id="result">Esperando escaneo...</div>
+
+  <script>
+    function onScanSuccess(decodedText, decodedResult) {
+      // Mostrar el código en pantalla
+      document.getElementById('result').innerText = "✅ Código detectado: " + decodedText;
+
+      // Detener el escáner para que no siga leyendo
+      html5QrcodeScanner.clear().catch(error => console.error("Error al detener escáner", error));
+    }
+
+    const html5QrcodeScanner = new Html5QrcodeScanner(
+      "reader",
+      {
+        fps: 10,
+        qrbox: { width: 300, height: 150 },
+        formatsToSupport: ["ean_13", "code_128", "upc_a", "upc_e"]
+      },
+      /* verbose= */ false
+    );
+    html5QrcodeScanner.render(onScanSuccess);
+  </script>
+
+</body>
+</html>
