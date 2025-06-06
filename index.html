@@ -17,24 +17,32 @@
   <div id="result">Esperando escaneo...</div>
 
   <script>
-    function onScanSuccess(decodedText, decodedResult) {
-      // Mostrar el código en pantalla
-      document.getElementById('result').innerText = "✅ Código detectado: " + decodedText;
+    function startScanner() {
+      const html5QrCode = new Html5Qrcode("reader");
 
-      // Detener el escáner para que no siga leyendo
-      html5QrcodeScanner.clear().catch(error => console.error("Error al detener escáner", error));
-    }
-
-    const html5QrcodeScanner = new Html5QrcodeScanner(
-      "reader",
-      {
+      const config = {
         fps: 10,
         qrbox: { width: 300, height: 150 },
         formatsToSupport: ["ean_13", "code_128", "upc_a", "upc_e"]
-      },
-      /* verbose= */ false
-    );
-    html5QrcodeScanner.render(onScanSuccess);
+      };
+
+      html5QrCode.start(
+        { facingMode: "environment" }, // cámara trasera
+        config,
+        (decodedText, decodedResult) => {
+          document.getElementById('result').innerText = "✅ Código detectado: " + decodedText;
+          html5QrCode.stop(); // detiene escaneo tras primera lectura
+        },
+        (errorMessage) => {
+          console.warn("Error de escaneo", errorMessage);
+        }
+      ).catch(err => {
+        console.error("Error al iniciar escáner", err);
+        document.getElementById('result').innerText = "❌ No se pudo iniciar el escáner.";
+      });
+    }
+
+    window.addEventListener("load", startScanner);
   </script>
 
 </body>
